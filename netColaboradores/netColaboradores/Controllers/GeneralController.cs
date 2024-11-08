@@ -107,5 +107,51 @@ namespace netColaboradores.Controllers
         }
 
 
+        [HttpDelete]
+        [Route("eliminar/{id:int}")]
+        public async Task<IActionResult> DeleteColaborador(int id)
+        {
+            // Obtener el colaborador por ID
+            var colaborador = await dbContext.Colaboradors
+                                             .FirstOrDefaultAsync(c => c.IdColaborador == id);
+
+            if (colaborador == null)
+                return NotFound("El colaborador no fue encontrado.");
+
+            // Verificar si el colaborador es profesor o administrativo y eliminar de la tabla correspondiente
+            if ((bool)colaborador.IsProfesor)
+            {
+                // Eliminar el registro del profesor
+                var profesor = await dbContext.Profesors
+                                              .FirstOrDefaultAsync(p => p.Fkcolaborador == id);
+
+                if (profesor != null)
+                {
+                    dbContext.Profesors.Remove(profesor); // Eliminar de la tabla Profesor
+                }
+            }
+            else
+            {
+                // Eliminar el registro del administrativo
+                var administrativo = await dbContext.Administrativos
+                                                    .FirstOrDefaultAsync(a => a.Fkcolaborador == id);
+
+                if (administrativo != null)
+                {
+                    dbContext.Administrativos.Remove(administrativo); // Eliminar de la tabla Administrativo
+                }
+            }
+
+            // Eliminar el colaborador de la tabla "Colaboradors"
+            dbContext.Colaboradors.Remove(colaborador);
+
+            // Guardar los cambios en la base de datos
+            await dbContext.SaveChangesAsync();
+
+            return StatusCode(StatusCodes.Status200OK, "Colaborador y su registro relacionado eliminados exitosamente.");
+        }
+
+
+
     }
 }

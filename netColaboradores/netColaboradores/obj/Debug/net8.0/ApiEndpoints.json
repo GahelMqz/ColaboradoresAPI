@@ -17,6 +17,22 @@
   },
   {
     "ContainingType": "netColaboradores.Controllers.GeneralController",
+    "Method": "DeleteColaborador",
+    "RelativePath": "api/General/eliminar/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "netColaboradores.Controllers.GeneralController",
     "Method": "GetFiltered",
     "RelativePath": "api/General/filtrar",
     "HttpMethod": "GET",
